@@ -202,6 +202,9 @@ No API keys, credentials, or patient data are included in this repository.
 - Pakistan Sign Language (PSL) support
 
 ---
+**##screenshots**
+
+<img width="1279" height="679" alt="admin portal" src="https://github.com/user-attachments/assets/facf1a76-244f-4e28-836f-9dc635438eb0" />
 
 ## License
 
