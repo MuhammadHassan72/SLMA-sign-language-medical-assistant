@@ -1,0 +1,86 @@
+GENERAL GESTURE PLAYGROUND VERIFICATION REPORT
+========================================================
+Timestamp: 2026-06-15 18:40:29
+Project: D:\FYP\Internal frontend\slma-fyp
+
+1. Implemented new non-medical gestures
+- Built-in MediaPipe labels kept: Unknown/None, Closed_Fist, Open_Palm, Pointing_Up, Thumb_Down, Thumb_Up, Victory, ILoveYou.
+- Added rule-based frontend-only gestures: Wave, Swipe_Left, Swipe_Right, Two_Hands_Open, Double_Thumbs_Up, Double_Fist, Two_Hand_Wave, Unknown_General_Gesture.
+- These gestures are evaluator-friendly general gestures only. They are not ASL medical predictions.
+
+2. How Wave is detected
+- The component stores a rolling buffer of the last 30 recognition frames.
+- Wave requires Open_Palm and repeated left-right horizontal motion of wrist/index-tip position.
+- Tiny jitter is ignored using a minimum per-frame movement threshold.
+- A hand must show meaningful horizontal range and at least two direction changes before Wave is proposed.
+- The final label is debounced and considered stable after about 650 ms.
+
+3. How swipe gestures are detected
+- Swipe_Left and Swipe_Right are detected from clear horizontal movement over recent frames.
+- Horizontal movement must exceed the swipe threshold and be stronger than vertical movement.
+- This logic runs only in the local browser rule engine.
+
+4. How dual-hand gestures are detected
+- Two_Hands_Open requires two detected hands with Open_Palm labels.
+- Double_Thumbs_Up requires two detected hands with Thumb_Up labels.
+- Double_Fist requires two detected hands with Closed_Fist labels.
+- Two_Hand_Wave requires two hands, at least Open_Palm involvement, and wave motion on both hands.
+
+5. UI/pipeline changes
+- Added camera-first mini preview with high-contrast hand overlay.
+- Added large final gesture label.
+- Added Live Gesture Processing Pipeline card.
+- Added FPS estimate, frames processed, raw label, raw confidence, final stabilized label, hand count, left/right labels, motion delta X/Y, stability timer, and last updated timestamp.
+- Added messages for no hand and unknown general gesture.
+- Kept disclaimer that this is separate from SLMA medical ASL recognition.
+
+6. Model/WASM status
+- Model path: /models/gesture_recognizer.task
+- Model file found: YES
+- Model file size: 8373332 bytes
+- WASM path: /mediapipe/tasks-vision/wasm
+- vision_wasm_internal.js: found, 322044 bytes
+- vision_wasm_internal.wasm: found, 11153617 bytes
+- vision_wasm_module_internal.js: found, 322082 bytes
+- vision_wasm_module_internal.wasm: found, 11153641 bytes
+- vision_wasm_nosimd_internal.js: found, 321847 bytes
+- vision_wasm_nosimd_internal.wasm: found, 10481398 bytes
+
+7. Validation commands/results
+- npm.cmd exec tsc -- --noEmit: PASS
+- npm.cmd run lint: PASS, no ESLint warnings or errors
+- Backend py_compile app/main.py app/messages.py: PASS
+- Patient page HTTP /patient: PASS 200
+- Model HTTP /models/gesture_recognizer.task: PASS 200
+- WASM HTTP /mediapipe/tasks-vision/wasm/vision_wasm_internal.wasm: PASS 200
+- Headless Chrome fake-camera smoke test: recognizer reached Ready, model/WASM loaded 200, pipeline updated.
+
+8. Manual gesture test results
+Physical hand-camera testing was not possible inside the headless Codex verification environment. Fake camera smoke test produced no real hand input, so final label stayed Unknown_General_Gesture with hand count 0.
+
+| Expected gesture | Detected label | Confidence | Stable >= 1 sec | Result |
+|---|---|---:|---|---|
+| Open_Palm | Not physically tested | N/A | N/A | Needs manual webcam test |
+| Closed_Fist | Not physically tested | N/A | N/A | Needs manual webcam test |
+| Thumb_Up | Not physically tested | N/A | N/A | Needs manual webcam test |
+| Thumb_Down | Not physically tested | N/A | N/A | Needs manual webcam test |
+| Victory | Not physically tested | N/A | N/A | Needs manual webcam test |
+| ILoveYou | Not physically tested | N/A | N/A | Needs manual webcam test |
+| Wave | Rule implemented, not physically tested | N/A | N/A | Needs manual webcam test |
+| Swipe_Left | Rule implemented, not physically tested | N/A | N/A | Needs manual webcam test |
+| Swipe_Right | Rule implemented, not physically tested | N/A | N/A | Needs manual webcam test |
+| Two_Hands_Open | Rule implemented, not physically tested | N/A | N/A | Needs manual webcam test |
+| Double_Thumbs_Up | Rule implemented, not physically tested | N/A | N/A | Needs manual webcam test |
+| Random unsupported | Unknown_General_Gesture in fake-camera smoke test | 0.0% | Yes | Works for no-hand/unsupported condition |
+
+9. Separation confirmation
+- General Gesture Playground does not call backend.
+- General Gesture Playground does not call CSRE.
+- General Gesture Playground does not save MongoDB predictions.
+- General Gesture Playground does not appear in doctor medical session log.
+- It only displays local frontend general gesture results.
+
+10. Limitations
+- Extra gestures are rule-based overlays on top of MediaPipe hand labels and landmarks, not newly trained model classes.
+- Wave/swipe thresholds may need small tuning after physical webcam testing.
+- Final verdict: Needs manual camera testing for physical gesture accuracy; local model initialization and UI pipeline are ready.

@@ -1,0 +1,53 @@
+# ─── Secrets (NEVER commit) ────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ─── Python / FastAPI backend ──────────────────────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Runtime data (patient uploads, logs)
+slma-backend/uploads/
+*.log
+.tmp-*
+
+# Large model weights (distributed separately — see SETUP.md)
+*.keras
+*.h5
+*.ckpt
+
+# ─── Node / Next.js frontend ───────────────────────────────────────────────
+node_modules/
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+.eslintcache
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ─── Vendored third-party binaries (restore via SETUP.md) ──────────────────
+slma-fyp/public/mediapipe/
+slma-fyp/public/models/*.task
+
+# ─── Editor / OS ───────────────────────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+*.bak

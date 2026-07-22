@@ -1,0 +1,155 @@
+==========================================================================
+ SLMA — GITHUB PAR PUSH KARNE KI COMPLETE GUIDE
+ (Roman Urdu + commands)
+==========================================================================
+
+ IS FOLDER MEIN JO HAI WOH READY-TO-UPLOAD HAI:
+   - Koi API key nahi (.env exclude hai)
+   - Koi node_modules / .venv / build files nahi
+   - Koi patient data (uploads/) nahi
+   - README.md, SETUP.md, LICENSE, .gitignore sab tayyar
+
+ NOTE: Ye file (GITHUB-PUSH-GUIDE.txt) sirf aap ke liye hai —
+       push karne se pehle isay delete kar sakte hain.
+
+==========================================================================
+ STEP 0 — GIT INSTALL HAI YA NAHI (aik dafa)
+==========================================================================
+PowerShell kholein aur likhein:
+
+    git --version
+
+ Agar version aa jaye to theek. Agar "not recognized" aaye to Git install
+ karein: https://git-scm.com/download/win  (installer chala kar Next-Next)
+
+ Phir apna naam/email set karein (aik dafa, poore computer ke liye):
+
+    git config --global user.name "Aapka Naam"
+    git config --global user.email "aapka@email.com"
+
+==========================================================================
+ STEP 1 — GITHUB PAR KHALI REPOSITORY BANAYEIN
+==========================================================================
+ 1. github.com par login karein
+ 2. Upar right mein "+" -> "New repository"
+ 3. Repository name:    slma-sign-language-medical-assistant
+    (ya jo naam pasand ho, spaces na dein)
+ 4. Description:        AI-powered bidirectional sign language communication
+                        system for deaf patients and doctors
+ 5. Public select karein (LinkedIn par showcase ke liye Public zaroori hai)
+ 6. *** "Add a README file" ko TICK NA KAREIN ***
+    *** ".gitignore" aur "license" bhi None rakhein ***
+    (kyunki humare paas pehle se ye files hain)
+ 7. "Create repository" dabayein
+ 8. Jo page khulega us par aap ka repo URL hoga, aisa:
+        https://github.com/USERNAME/slma-sign-language-medical-assistant.git
+    Isay copy kar lein.
+
+==========================================================================
+ STEP 2 — IS FOLDER KO GIT REPO BANAYEIN AUR PUSH KAREIN
+==========================================================================
+ PowerShell kholein aur EXACTLY ye commands aik aik kar ke chalayein:
+
+    cd "C:\Users\Hp\Desktop\SLMA-GitHub-Upload"
+
+    git init
+
+    git add .
+
+    git status
+    ^^^ YAHAN RUKEIN AUR DEKHEIN:
+        - ".env" kahin nazar NAHI aani chahiye
+        - "node_modules" kahin nazar NAHI aani chahiye
+        Agar dikhein to STOP karein aur .gitignore check karein.
+
+    git commit -m "SLMA: AI-powered sign language medical assistant"
+
+    git branch -M main
+
+    git remote add origin https://github.com/USERNAME/REPO-NAME.git
+    ^^^ USERNAME aur REPO-NAME apne actual values se badlein
+
+    git push -u origin main
+
+ Pehli dafa push par GitHub login maangega:
+   - Browser khulega -> "Authorize" dabayein
+   - Ya username + Personal Access Token maangega (password NAHI chalta)
+     Token banane ke liye: GitHub -> Settings -> Developer settings ->
+     Personal access tokens -> Tokens (classic) -> Generate new token ->
+     "repo" scope tick karein -> token copy kar ke password ki jagah paste karein
+
+==========================================================================
+ STEP 3 — CONFIRM KAREIN
+==========================================================================
+ Browser mein apna repo kholein. Ye nazar aana chahiye:
+   - README.md khud hi neeche render ho raha ho (screenshots + tables ke saath)
+   - slma-fyp/ aur slma-backend/ folders
+   - docs/ folder
+   - LICENSE
+
+ ZAROORI CHECK: repo mein ".env" file NAHI honi chahiye.
+ Agar galti se chali gayi ho to foran:
+   1. GitHub par repo Settings -> Delete repository
+   2. Gemini API key rotate karein (Google AI Studio se nayi key banayein)
+   3. .gitignore theek kar ke dobara push karein
+
+==========================================================================
+ STEP 4 — REPO KO KHOOBSURAT BANAYEIN (LinkedIn ke liye ahem)
+==========================================================================
+ A) SCREENSHOTS ADD KAREIN (bohot recommended)
+    Repo ko aur professional banane ke liye:
+
+      1. Is folder mein "screenshots" naam ka folder banayein
+      2. Desktop ke "pics for upload" folder se saari PNG copy kar dein
+      3. README.md mein sabse upar (title ke neeche) ye add karein:
+
+         ![Patient Portal](screenshots/patient%20portal.png)
+         ![Doctor Portal](screenshots/doctor%20messages.png)
+
+      4. Phir:
+         git add .
+         git commit -m "docs: add screenshots"
+         git push
+
+ B) REPO KE "About" SECTION MEIN (right side, gear icon):
+    Description: AI-powered bidirectional sign language communication
+                 system connecting deaf patients with doctors
+    Topics add karein (search mein madad karte hain):
+        machine-learning  deep-learning  sign-language  healthcare
+        nextjs  fastapi  tensorflow  mediapipe  mongodb  accessibility
+        computer-vision  react  typescript  python
+
+==========================================================================
+ STEP 5 — BAAD MEIN CODE UPDATE KARNA HO TO
+==========================================================================
+    cd "C:\Users\Hp\Desktop\SLMA-GitHub-Upload"
+    git add .
+    git commit -m "kya change kiya uska short message"
+    git push
+
+==========================================================================
+ BARI FILES KA MASLA (agar model bhi upload karna ho)
+==========================================================================
+ GitHub par 100 MB se bari file allowed nahi, aur 50 MB par warning aati hai.
+ Aap ka model (~67 MB) is liye is folder mein SHAMIL NAHI hai.
+
+ Agar aap model bhi share karna chahte hain to 2 tareeqe hain:
+
+ TAREEQA 1 — GitHub Release (aasan, recommended):
+   1. Repo par jayein -> right side "Releases" -> "Create a new release"
+   2. Tag: v1.0.0   Title: SLMA v1.0.0
+   3. Neeche "Attach binaries" par model file drag kar dein
+   4. Publish release
+   5. README mein us release ka link de dein
+
+ TAREEQA 2 — Google Drive:
+   Model Drive par upload karein, link "Anyone with the link" karein,
+   aur SETUP.md mein woh link daal dein.
+
+==========================================================================
+ LINKEDIN POST KE LIYE
+==========================================================================
+ "pics for upload" folder mein "LINKEDIN-POST.txt" file bani hui hai —
+ usme ready post text aur har picture ka caption maujood hai.
+
+==========================================================================

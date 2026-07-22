@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+motor
+python-dotenv
+python-multipart
+numpy
+tensorflow
+google-genai

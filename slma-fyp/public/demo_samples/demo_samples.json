@@ -1,0 +1,72 @@
+﻿[
+    {
+        "label":  "SICK",
+        "display_name":  "Sick",
+        "file":  "sick.npy",
+        "expected_confidence":  0.9988709,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\00961775886447791-SICK.npy"
+    },
+    {
+        "label":  "HEART",
+        "display_name":  "Heart",
+        "file":  "heart.npy",
+        "expected_confidence":  0.99682224,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\06320958609251259-HEART.npy"
+    },
+    {
+        "label":  "STOMACH",
+        "display_name":  "Stomach",
+        "file":  "stomach.npy",
+        "expected_confidence":  0.942759,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\04144501505826126-STOMACH.npy"
+    },
+    {
+        "label":  "HEADACHE",
+        "display_name":  "Headache",
+        "file":  "headache.npy",
+        "expected_confidence":  0.880192,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\4052855278937373-HEADACHE.npy"
+    },
+    {
+        "label":  "TIRED",
+        "display_name":  "Tired",
+        "file":  "tired.npy",
+        "expected_confidence":  0.98963624,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\6581168309162115-TIRED.npy"
+    },
+    {
+        "label":  "COLD",
+        "display_name":  "Cold",
+        "file":  "cold.npy",
+        "expected_confidence":  0.8937624,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\39972345824182876-COLD.npy"
+    },
+    {
+        "label":  "HOT",
+        "display_name":  "Hot",
+        "file":  "hot.npy",
+        "expected_confidence":  0.9403971,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\23737096674333502-HOT.npy"
+    },
+    {
+        "label":  "SLEEP",
+        "display_name":  "Sleep",
+        "file":  "sleep.npy",
+        "expected_confidence":  0.98876244,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\2139029309275231-SLEEP.npy"
+    },
+    {
+        "label":  "FAINT",
+        "display_name":  "Faint",
+        "file":  "faint.npy",
+        "expected_confidence":  0.9986987,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\6079505770980691-FAINT.npy"
+    },
+    {
+        "label":  "INHALE",
+        "display_name":  "Inhale",
+        "file":  "inhale.npy",
+        "expected_confidence":  0.9875695,
+        "original_path":  "D:\\FYP\\Datatsets\\ASL_Citizen\\mp_landmarks_final_339\\test\\03659010664675599-INHALE.npy"
+    }
+]

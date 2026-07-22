@@ -1,0 +1,149 @@
+==========================================================================
+ SLMA — COMPLETE ENDPOINT & ROUTE REFERENCE
+ (Sign Language Medical Assistant)
+ Generated from the live running backend OpenAPI spec + frontend source.
+ Backend base URL : http://localhost:8000   (LAN: http://192.168.2.2:8000)
+ Frontend base URL: http://localhost:3000   (LAN: http://192.168.2.2:3000)
+ Total backend endpoints: 35
+==========================================================================
+
+LEGEND (auth):
+  [PUBLIC]  = no login needed (this is the PATIENT side + login/health)
+  [DOCTOR]  = requires a logged-in doctor OR admin cookie (slma_auth)
+  [ADMIN]   = requires a logged-in admin cookie
+  [USER]    = any logged-in staff (doctor or admin)
+  [DEV]     = only enabled when APP_ENV = development
+
+==========================================================================
+ A) BACKEND API ENDPOINTS  (FastAPI, file: slma-backend/app/*.py)
+==========================================================================
+
+--- ROOT / HEALTH  (app/main.py) ---
+GET   /                         [PUBLIC]  Service info + links
+GET   /health                  [PUBLIC]  Health check + MongoDB connected status
+
+--- AUTH  (app/auth.py, prefix /auth) ---
+POST  /auth/login              [PUBLIC]  Doctor/Admin login -> sets httpOnly cookie "slma_auth"
+POST  /auth/doctor-signup      [PUBLIC]  Doctor self sign-up (status = "pending", waits admin approval)
+POST  /auth/logout             [PUBLIC]  Clears the session cookie
+GET   /auth/me                 [USER]    Returns current logged-in user + doctor profile
+
+--- ADMIN  (app/admin.py, prefix /admin) ---
+POST  /admin/doctors                          [ADMIN]  Create a doctor account
+GET   /admin/doctors                          [ADMIN]  List/search doctors (filter by status)
+PATCH /admin/doctors/{doctor_id}              [ADMIN]  Edit a doctor's details
+PATCH /admin/doctors/{doctor_id}/status       [ADMIN]  Approve / activate / deactivate a doctor
+POST  /admin/doctors/{doctor_id}/reset-password [ADMIN] Reset a doctor's password
+GET   /admin/summary                          [ADMIN]  Dashboard counts (doctors, patients, sessions)
+GET   /admin/sessions/recent                  [ADMIN]  Recent consultation sessions summary
+
+--- DOCTORS  (app/doctors.py, prefix /doctors) ---
+GET   /doctors/me              [USER]    Logged-in doctor's own profile
+
+--- PATIENTS  (app/patients.py, prefix /patients) ---
+GET   /patients                        [DOCTOR]  Search patient profiles (doctor-entered)
+POST  /patients                        [DOCTOR]  Create a patient profile (with duplicate check)
+GET   /patients/{patient_id}           [DOCTOR]  Get one patient
+PATCH /patients/{patient_id}           [DOCTOR]  Update a patient
+GET   /patients/{patient_id}/history   [DOCTOR]  A patient's past sessions + predictions + doctor replies
+
+--- SESSIONS  (app/sessions.py, prefix /sessions) ---
+POST  /sessions/start                          [DOCTOR]  Doctor starts a consultation (one active per doctor)
+GET   /sessions/latest                         [PUBLIC]  *** PATIENT auto-connect: newest active session ***
+GET   /sessions/mine/latest                    [DOCTOR]  Doctor's own active session
+GET   /sessions/mine/history                   [DOCTOR]  Doctor's past sessions
+POST  /sessions/{session_id}/end               [DOCTOR]  End a consultation (status -> completed)
+POST  /sessions/{session_id}/predict-npy       [PUBLIC]  *** PATIENT: upload .npy landmark file -> prediction ***
+POST  /sessions/{session_id}/predict-live-sequence [PUBLIC] *** PATIENT: live camera frames -> prediction ***
+POST  /sessions/{session_id}/camera-frame      [PUBLIC]  *** PATIENT: push live JPEG frame (in-memory relay) ***
+GET   /sessions/{session_id}/camera-frame      [DOCTOR]  *** DOCTOR: pull latest patient JPEG frame ***
+GET   /sessions/{session_id}                   [DOCTOR]  Full session: patient + doctor + messages + predictions
+
+--- MESSAGES  (app/messages.py, prefix /messages) ---
+POST  /messages/doctor                 [DOCTOR]  *** DOCTOR -> PATIENT message (+ optional animation_key) ***
+GET   /messages/{session_id}           [PUBLIC]  *** PATIENT polls doctor messages ***
+
+--- INFERENCE  (app/inference.py, prefix /inference) ---
+POST  /inference/npy                   [PUBLIC]  Raw model test: .npy (96x339) -> top-5 (no DB write)
+
+--- CSRE  (app/csre.py, prefix /csre) ---
+POST  /csre/refine                     [PUBLIC]  Refine top-5 glosses -> one cautious clinical sentence
+
+--- DEBUG  (app/debug.py, prefix /debug) ---
+GET   /debug/db-summary                [DEV]     JSON DB summary (collection counts + latest docs)
+GET   /debug/db-summary/html           [DEV]     Same, rendered as an HTML page
+
+NOTE: app/realtime.py has a /realtime router placeholder (ConnectionRegistry
+class) but registers NO endpoints — the app uses REST polling, not sockets.
+
+==========================================================================
+ B) FRONTEND ROUTES  (Next.js 14 App Router, file: slma-fyp/src/app/*)
+==========================================================================
+/            slma-fyp/src/app/page.tsx           Landing / marketing page
+/login       slma-fyp/src/app/login/page.tsx     Staff (doctor/admin) login
+/signup      slma-fyp/src/app/signup/page.tsx    Doctor self sign-up (pending approval)
+/admin       slma-fyp/src/app/admin/page.tsx     Admin dashboard (approve doctors, view sessions)
+/doctor      slma-fyp/src/app/doctor/page.tsx    Doctor consultation portal (auth-gated)
+/patient     slma-fyp/src/app/patient/page.tsx   Patient portal (PUBLIC, no login)
+/mediapipe   slma-fyp/src/app/mediapipe/page.tsx MediaPipe landmark test/demo page
+(not-found)  slma-fyp/src/app/not-found.tsx      404 page
+
+==========================================================================
+ C) WHICH FRONTEND PAGE CALLS WHICH ENDPOINT
+==========================================================================
+PATIENT PORTAL (/patient)  -- all PUBLIC, polling loops:
+  every 3s : GET  /sessions/latest              (auto-connect to active session)
+  every 2s : GET  /messages/{id}                (receive doctor messages)
+  every 1s : POST /sessions/{id}/camera-frame   (share live camera JPEG, 480px q0.6)
+  on click : POST /sessions/{id}/predict-live-sequence  (Translate Sign / modes)
+  on click : POST /sessions/{id}/predict-npy    (demo file dropdown / manual .npy upload)
+
+DOCTOR PORTAL (/doctor)  -- all require the doctor cookie:
+  on load  : GET  /auth/me                       (verify doctor role)
+  every 2s : GET  /sessions/{id}                 (messages + predictions)
+  every 700ms: GET /sessions/{id}/camera-frame   (patient live video frame)
+  on click : POST /sessions/start                (start consultation)
+  on click : GET  /sessions/mine/latest          (load my active)
+  on click : POST /sessions/{id}/end             (end consultation)
+  on click : POST /messages/doctor               (send message + avatar animation_key)
+  patient mgmt: GET/POST/PATCH /patients ...     (search/create/edit patient)
+
+ADMIN PORTAL (/admin)  -- require admin cookie:
+  GET /admin/summary, GET /admin/doctors, GET /admin/sessions/recent,
+  POST /admin/doctors, PATCH /admin/doctors/{id}, PATCH /admin/doctors/{id}/status,
+  POST /admin/doctors/{id}/reset-password
+
+LOGIN/SIGNUP:  POST /auth/login, POST /auth/doctor-signup, GET /auth/me, POST /auth/logout
+
+==========================================================================
+ D) BACKEND<->FRONTEND CONNECTION MODEL (how they talk)
+==========================================================================
+* No WebSockets / Socket.io / Redis. Pure HTTP REST + short polling loops.
+* Frontend picks the backend URL dynamically (src/lib/backend.ts):
+    - if browser host = localhost  -> http://localhost:8000
+    - else (LAN IP)                -> http://<same-host>:8000
+  So the DOCTOR laptop opening http://192.168.2.2:3000 automatically calls
+  http://192.168.2.2:8000.  fetch() uses credentials:"include" for the cookie.
+* CORS (app/main.py): allows localhost:3000 + a LAN regex (192.168.x / 10.x /
+  172.16-31.x) on port 3000, with allow_credentials=true.
+* Camera frames are relayed IN MEMORY on the backend (_camera_frames dict in
+  sessions.py) — the latest frame only, never written to MongoDB (performance).
+
+==========================================================================
+ E) QUICK cURL / POWERSHELL TEST SNIPPETS
+==========================================================================
+# Health
+Invoke-RestMethod http://localhost:8000/health
+
+# Newest active session id (what the patient page uses)
+Invoke-RestMethod http://localhost:8000/sessions/latest
+
+# Send a demo .npy through a session (replace SID):
+curl.exe -F "file=@D:\FYP\Internal frontend\slma-fyp\public\demo_samples\sick.npy" http://localhost:8000/sessions/SID/predict-npy
+
+# Read the doctor messages of a session:
+Invoke-RestMethod http://localhost:8000/messages/SID
+
+# Raw model test (no session/db):
+curl.exe -F "file=@D:\FYP\Internal frontend\slma-backend\test_landmark_96x339.npy" http://localhost:8000/inference/npy
+==========================================================================
