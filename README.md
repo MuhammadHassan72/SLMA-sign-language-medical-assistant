@@ -204,7 +204,21 @@ No API keys, credentials, or patient data are included in this repository.
 ---
 **##screenshots**
 
-<img width="1279" height="679" alt="admin portal" src="https://github.com/user-attachments/assets/facf1a76-244f-4e28-836f-9dc635438eb0" />
+<img width="642" height="402" alt="asl_translation" src="https://github.com/user-attachments/assets/11eaed63-978e-4913-8d76-f6aa8f1bc97d" />
+<img width="1279" height="679" alt="admin portal" src="https://github.com/user-attachments/assets/4124ee25-e7b5-4260-b2b1-86060b033dec" />
+<img width="602" height="275" alt="transaltion mode" src="https://github.com/user-attachments/assets/0589e47e-be03-4e97-ab18-4434cb386a68" />
+<img width="527" height="376" alt="sign translation and translation log" src="https://github.com/user-attachments/assets/c65a1b69-5446-4bc1-9fc3-01ff51b63903" />
+<img width="509" height="233" alt="quick message for avatr to perform" src="https://github.com/user-attachments/assets/14b84446-ed22-47ce-ac6c-40b03012f1b3" />
+<img width="1280" height="685" alt="patient portal" src="https://github.com/user-attachments/assets/be9952f2-c35a-46a7-9d37-a6ffe6283a87" />
+<img width="1276" height="178" alt="patient history and session st5art " src="https://github.com/user-attachments/assets/ea5fc714-45ce-4225-a4c4-a58faa071ab6" />
+<img width="730" height="128" alt="message passing for deaf by doctor" src="https://github.com/user-attachments/assets/4a988aee-887a-435e-a9e6-3de6b5a84455" />
+<img width="579" height="537" alt="login portal" src="https://github.com/user-attachments/assets/f7f3b26d-2f1a-4761-ab3b-2e50dde10f34" />
+<img width="595" height="370" alt="gesture playgorund for non signers" src="https://github.com/user-attachments/assets/d46f46d4-97b4-4c4c-81f1-0bfd18718e9d" />
+<img width="617" height="310" alt="doctor messages" src="https://github.com/user-attachments/assets/781eb132-753c-4a83-88b3-22ac13715643" />
+<img width="611" height="252" alt="backedn _testingfiles" src="https://github.com/user-attachments/assets/83a76c50-2c98-4b9d-8ed2-7f1a708630b9" />
+<img width="629" height="251" alt="avatar for sign communication" src="https://github.com/user-attachments/assets/a4598f1f-7307-4a82-b523-18e9cac17703" />
+
+
 
 ## License
 
